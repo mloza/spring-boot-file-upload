@@ -20,15 +20,12 @@ public class UploadController {
         File uploadDirectory = new File("uploads");
         uploadDirectory.mkdirs();    // 3
 
-        try {
-            File oFile = new File("uploads/" + file.getOriginalFilename());
-            OutputStream os = new FileOutputStream(oFile);
-            InputStream inputStream = file.getInputStream();
+        File oFile = new File("uploads/" + file.getOriginalFilename());
+        try (
+                OutputStream os = new FileOutputStream(oFile);
+                InputStream inputStream = file.getInputStream()) {
 
             IOUtils.copy(inputStream, os); // 4
-
-            os.close();
-            inputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
             return "Wystąpił błąd podczas przesyłania pliku: " + e.getMessage();
